@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\V1\BrandResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,8 +17,14 @@ class BrandController extends ApiController
      */
     public function index()
     {
-        $brands = Brand::all();
-        return $this->successResponse($brands,200);
+        $brands = Brand::paginate(2);
+        return $this->successResponse([
+            'brands'=> BrandResource::collection($brands),
+            'links'=> BrandResource::collection($brands)->response()->getData()->links,
+            'meta'=> BrandResource::collection($brands)->response()->getData()->meta
+        ],200);
+       
+        // return $this->successResponse(new BrandResource($brands),200);
     }
 
     /**
@@ -43,7 +50,7 @@ class BrandController extends ApiController
             'display_name'=>$request->display_name
         ]);
 
-        return $this->successResponse($brand,200);
+        return $this->successResponse(new BrandResource($brand),200);
     }
 
     /**
@@ -54,7 +61,7 @@ class BrandController extends ApiController
      */
     public function show(Brand $brand)
     {
-        return $this->successResponse($brand,200);
+        return $this->successResponse(new BrandResource($brand),200);
     }
 
     /**
@@ -83,7 +90,7 @@ class BrandController extends ApiController
             'display_name'=>$request->display_name
         ]);
 
-        return $this->successResponse($brand,200);
+        return $this->successResponse(new BrandResource($brand),200);
     }
 
     /**

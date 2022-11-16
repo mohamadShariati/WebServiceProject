@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BrandResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,13 @@ class BrandResource extends JsonResource
     {
         // return parent::toArray($request);
 
-        return [
-            'شماره'=>$this->id,
-            'نام'=>$this->name,
-            'نام نمایشی'=>$this->display_name
+        return[
+            'id'=>$this->id,
+            'parent_id'=>$this->parent_id,
+            'name'=>$this->name,
+            'description'=>$this->description,
+            'children'=>CategoryResource::collection($this->whenLoaded('children')),
+            'parent'=>new CategoryResource($this->whenLoaded('parent'))
         ];
     }
 }

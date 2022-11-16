@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\V1\BrandController;
+use App\Http\Controllers\V1\CategoryController;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('/V1')->group(function(){
-    Route::apiResource('/brands',(BrandController::class));
+    Route::apiResource('/brand',(BrandController::class));
+    Route::apiResource('/category',(CategoryController::class));
+
+    Route::get('/category/{category}/children',[CategoryController::class,'children']);
+    Route::get('/category/{category}/parent',[CategoryController::class,'parent']);
 });
+
