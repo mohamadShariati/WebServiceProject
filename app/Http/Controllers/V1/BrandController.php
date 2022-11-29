@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Models\Brand;
+use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Http\Resources\V1\BrandResource;
-use App\Models\Brand;
-use Illuminate\Http\Request;
+use App\Http\Resources\V1\ProductResource;
 use Illuminate\Support\Facades\Validator;
 
 class BrandController extends ApiController
@@ -103,5 +105,17 @@ class BrandController extends ApiController
     {
         $brand->delete();
         return $this->successResponse('Brand deleted successfully',200);
+    }
+
+    public function products(Brand $brand)
+    {
+        
+        return $this->successResponse(new BrandResource($brand->load('products')),200);
+    }
+
+    public function productsBrands(Brand $brand)
+    {
+        $products=Product::where('brand_id',$brand->id)->get();
+        return $this->successResponse(ProductResource::collection($products),200);
     }
 }

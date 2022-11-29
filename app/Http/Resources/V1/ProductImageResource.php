@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BrandResource extends JsonResource
+class ProductImageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +14,10 @@ class BrandResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-
         return [
-            'شماره'=>$this->id,
-            'نام'=>$this->name,
-            'نام نمایشی'=>$this->display_name,
-            'محصولات'=>ProductResource::collection($this->whenLoaded('products')->load('images'))
+            'id'=>$this->id,
+            'product_id'=>$this->product_id,
+            'images'=>url(env('PRODUCT_IMAGES_UPLOAD_PATH').$this->image)
         ];
     }
 }
